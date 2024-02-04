@@ -8,6 +8,7 @@ import { socket } from "../utils/socket/socket";
 import { flipBoard } from "../utils/mathFunctions";
 import PromotionToast from "./PromotionToast";
 import { getPieceName } from "../utils/pieceUtils";
+import { validateCapture } from "../utils/pathChecks/validateCaptureForOppositeColor";
 
 type Piece = string;
 
@@ -183,7 +184,18 @@ const Board = ({ currentPlayerColor, hostID }: props) => {
           onClick={(e) => onPieceClick(e, col, row)}
         >
           {image ? (
-            <Piece image={image} x_coordinate={col} y_coordinate={row} />
+            <Piece
+              image={image}
+              x_coordinate={col}
+              y_coordinate={row}
+              inDanger={!!selectedPiece && validateCapture(
+                +selectedPiece[0],
+                +selectedPiece[1],
+                col,
+                row,
+                boardState
+              )}
+            />
           ) : (
             isValidTile && (
               <span className="w-5 h-5 rounded-full bg-indigo-500"></span>
